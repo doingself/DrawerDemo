@@ -14,6 +14,14 @@ class RootViewController: UIViewController {
     
     private let maxWidth: CGFloat = UIScreen.main.bounds.size.width / 4 * 3
     
+    private lazy var coverView: UIView = {
+        let v = UIView(frame: self.view.bounds)
+        v.backgroundColor = UIColor.clear
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.coverTap(sender:))))
+        v.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(self.coverPan(sender:))))
+        return v
+    }()
+    
     private var mainViewController: UIViewController!
     private var leftViewController: UIViewController!
     
@@ -24,11 +32,12 @@ class RootViewController: UIViewController {
         self.mainViewController = main
         self.leftViewController = left
         
-        self.view.addSubview(main.view)
-        self.view.addSubview(left.view)
+        // 注意顺序
+        self.view.addSubview(self.leftViewController.view)
+        self.view.addSubview(self.mainViewController.view)
         
-        self.addChildViewController(main)
-        self.addChildViewController(left)
+        self.addChildViewController(self.leftViewController)
+        self.addChildViewController(self.mainViewController)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,8 +54,56 @@ class RootViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func openLeft(){
+
+    @objc func coverTap(sender: Any?){
+        closeLeft()
+    }
+    @objc func coverPan(sender: Any?){
+        guard let pan = sender as? UIPanGestureRecognizer else { return }
         
+        let offsetX = pan.translation(in: pan.view).x
+        
+        if offsetX > 0 {return}
+        
+        if pan.state == UIGestureRecognizerState.changed && offsetX >= -maxWidth {
+            
+            let distace = maxWidth + offsetX
+            
+            mainViewController.view.transform = CGAffineTransform(translationX: distace, y: 0)
+            leftViewController.view.transform = CGAffineTransform(translationX: offsetX, y: 0)
+            
+        } else if pan.state == UIGestureRecognizerState.ended || pan.state == UIGestureRecognizerState.cancelled || pan.state == UIGestureRecognizerState.failed {
+            
+            if offsetX > -UIScreen.main.bounds.size.width * 0.5 {
+                
+                openLeft()
+                
+            } else {
+                
+                closeLeft()
+            }
+            
+        }
+    }
+    func openLeft(){
+        self.mainViewController.view.addSubview(self.coverView)
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.curveLinear, animations: {
+            self.coverView.backgroundColor = UIColor(white: 0.7, alpha: 0.5)
+            self.leftViewController.view.transform = CGAffineTransform.identity
+            self.mainViewController.view.transform = CGAffineTransform(translationX: self.maxWidth, y: 0)
+        }) { (finished: Bool) in
+            
+        }
+    }
+    func closeLeft(){
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.curveLinear, animations: {
+            self.leftViewController.view.transform = CGAffineTransform(translationX: -self.maxWidth, y: 0)
+            self.mainViewController.view.transform = CGAffineTransform.identity
+            self.coverView.backgroundColor = UIColor.clear
+        }) { (finished: Bool) in
+            self.coverView.removeFromSuperview()
+        }
     }
 }

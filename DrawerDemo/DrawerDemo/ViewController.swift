@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         RootViewController.shared?.openLeft()
     }
     @objc func rightItemAction(sender: Any?){
-        let pop = LeftViewController()
+        let pop = PopViewController()
         pop.preferredContentSize = CGSize(width: 150, height: 300)
         pop.modalPresentationStyle = .popover
         pop.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
