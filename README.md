@@ -3,7 +3,7 @@
 + 抽屉, 类似 QQ 左边侧滑
 + 弹出菜单 `popoverPresentationController`
 
-<figure>
+<figure class="half">
     <img src="https://github.com/doingself/DrawerDemo/blob/master/images/image1.jpg">
     <img src="https://github.com/doingself/DrawerDemo/blob/master/images/image2.jpg">
 </figure>
