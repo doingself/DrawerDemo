@@ -3,6 +3,11 @@
 + 抽屉, 类似 QQ 左边侧滑
 + 弹出菜单 `popoverPresentationController`
 
+<figure>
+    <img src="https://github.com/doingself/DrawerDemo/blob/master/images/image1.jpg">
+    <img src="https://github.com/doingself/DrawerDemo/blob/master/images/image2.jpg">
+</figure>
+
 ## 抽屉思路
 
 ### 将2个 UIViewController 放入 同一个 UIViewController中
