@@ -48,6 +48,13 @@ pop.popoverPresentationController?.delegate = self
 self.present(pop, animated: true, completion: nil)
 ```
 
-#### 参考
+# Requirements
++ Swift 4
++ iOS 10+
++ Xcode 9+
+
+---
+
+鸣谢
 
 + https://www.jianshu.com/p/679b94639765
